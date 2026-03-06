@@ -6,7 +6,7 @@
 
 ## Problem
 
-A commit log captures raw events, but consumers need derived state -- aggregations, latest values, filtered subsets. Today consumers of a the [tally](https://github.com/w-h-a/tally) commit log have to write hand-rolled offset tracking, state management, recovery logic, and queries. Every consumer re-invents the same infrastructure. 
+A commit log captures raw events, but consumers need derived state -- aggregations, latest values, filtered subsets. Today consumers of the [tally](https://github.com/w-h-a/tally) commit log have to write hand-rolled offset tracking, state management, recovery logic, and queries. Every consumer re-invents the same infrastructure. 
 
 ## Solution
 
@@ -29,4 +29,4 @@ flowchart LR
 
 ## Usage
 
-Comming soon!
+Coming soon!

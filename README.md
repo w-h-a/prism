@@ -17,14 +17,15 @@ Together, tally and prism implement Kleppmann's "turning the database inside out
 ## Architecture
 
 ```mermaid
-flowchart LR                                             
-      T[Tally Log] -->|ConsumeStream| E[Engine]                                                                            
+flowchart LR           
+      T[Tally Log] -->|ConsumeStream| E[Engine]
       E --> P1[Projection 1]
       E --> P2[Projection N]
       P1 -->|Apply + Cursor txn| S[(SQLite)]
       P2 -->|Apply + Cursor txn| S
-      S --> G[gRPC Server]
-      G -->|Get/Scan/Subscribe| C[Clients]
+      C[Clients] -->|Get/Scan/Subscribe| G[gRPC Server]
+      G --> E
+      E -->|read| S
 ```
 
 ## Usage

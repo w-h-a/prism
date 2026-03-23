@@ -19,10 +19,9 @@ Together, tally and prism implement Kleppmann's "turning the database inside out
 ```mermaid
 flowchart LR           
       T[Tally Log] -->|ConsumeStream| E[Engine]
-      E --> P1[Projection 1]
-      E --> P2[Projection N]
-      P1 -->|Apply + Cursor txn| S[(SQLite)]
-      P2 -->|Apply + Cursor txn| S
+      E -->|ViewContext| P1[Projector 1]
+      E -->|ViewContext| P2[Projector N]
+      E -->|Apply + Cursor txn| S[(SQLite)]
       C[Clients] -->|Get/Scan/Subscribe| G[gRPC Server]
       G --> E
       E -->|read| S

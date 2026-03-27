@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prism
+  namespace: prism
+  labels:
+    app: prism
+    version: VERSION_PLACEHOLDER
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: prism
+  template:
+    metadata:
+      labels:
+        app: prism
+        version: VERSION_PLACEHOLDER
+    spec:
+      containers:
+        - name: prism
+          image: IMAGE_PLACEHOLDER
+          ports:
+            - name: grpc
+              containerPort: 8080
+            - name: health
+              containerPort: 8081
+          env:
+            - name: VERSION
+              value: VERSION_PLACEHOLDER
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-collector.otel-collector.svc.cluster.local:4317
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 128Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: prism-data

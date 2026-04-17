@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"syscall"
 	"time"
+
+	"github.com/w-h-a/prism/internal/handler/http/health"
 )
 
 func main() {
@@ -26,9 +28,14 @@ func main() {
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
+	h := health.New()
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /healthz", h.Healthz)
+	mux.HandleFunc("GET /readyz", h.Readyz)
+
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", *healthPort),
-		Handler: newHealthMux(),
+		Handler: mux,
 	}
 
 	go func() {

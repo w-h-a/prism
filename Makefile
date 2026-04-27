@@ -1,4 +1,4 @@
-.PHONY: tidy generate check-style style lint test build
+.PHONY: tidy generate check-style style test build
 
 tidy:
 	go mod tidy
